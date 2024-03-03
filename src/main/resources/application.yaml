@@ -8,3 +8,6 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root # 数据库账号
     password: 18912218891Cxs # 数据库密码
+  redis:
+    host: 127.0.0.1
+    port: 6379

@@ -3,6 +3,7 @@ package com.kyle.authorizationserver.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -13,6 +14,7 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.sql.DataSource;
 
@@ -27,11 +29,11 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private DataSource dataSource;
+    private RedisConnectionFactory redisConnectionFactory;
 
     @Bean
     public TokenStore jdbcTokenStore() {
-        return new JdbcTokenStore(dataSource);
+        return new RedisTokenStore(redisConnectionFactory);
     }
 
     @Override
@@ -45,21 +47,21 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
         oauthServer.checkTokenAccess("isAuthenticated()");
     }
 
-    @Bean
-    public ClientDetailsService jdbcClientDetailsService() {
-        return new JdbcClientDetailsService(dataSource);
-    }
+//    @Bean
+//    public ClientDetailsService jdbcClientDetailsService() {
+//        return new JdbcClientDetailsService(dataSource);
+//    }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//        clients.inMemory() // <4.1>
-//                .withClient("clientapp").secret("112233") // <4.2> Client 账号、密码。
-//                .authorizedGrantTypes("password")
+        clients.inMemory() // <4.1>
+                .withClient("clientapp").secret("112233") // <4.2> Client 账号、密码。
+                .authorizedGrantTypes("password", "refresh_token")
 //                .redirectUris("http://127.0.0.1:9090/callback")// <4.2> 密码模式
-//                .scopes("read_userinfo", "read_contacts") // <4.2> 可授权的 Scope
+                .scopes("read_userinfo", "read_contacts") // <4.2> 可授权的 Scope
 //                .and().withClient() // <4.3> 可以继续配置新的 Client
         ;
-        clients.withClientDetails(jdbcClientDetailsService());
+//        clients.withClientDetails(jdbcClientDetailsService());
     }
 
 }

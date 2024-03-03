@@ -52,6 +52,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.48</version>
         </dependency>
+
+        <!-- 实现对 Spring Data Redis 的自动化配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
