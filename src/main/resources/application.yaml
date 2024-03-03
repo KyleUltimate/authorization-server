@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  # datasource 数据源配置内容，对应 DataSourceProperties 配置属性类
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/kyle_db?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root # 数据库账号
+    password: 18912218891Cxs # 数据库密码
